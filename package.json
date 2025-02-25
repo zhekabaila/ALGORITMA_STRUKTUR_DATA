@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "praktikum_c": "sh -c '[ -z \"$npm_config_modul\" ] && echo \"Error: Parameter --modul (modul) dibutuhkan!\" && exit 1; [ -z \"$npm_config_file\" ] && echo \"Error: Parameter --file (file) dibutuhkan!\" && exit 1; mkdir -p ./praktikum/$npm_config_modul/build && g++ ./praktikum/$npm_config_modul/app/$npm_config_file.cross -o ./praktikum/$npm_config_modul/build/$npm_config_file.exe; ./praktikum/$npm_config_modul/build/$npm_config_file.exe'",
+    "praktikum_c": "sh -c '[ -z \"$npm_config_modul\" ] && echo \"Error: Parameter --modul (modul) dibutuhkan!\" && exit 1; [ -z \"$npm_config_file\" ] && echo \"Error: Parameter --file (file) dibutuhkan!\" && exit 1; mkdir -p ./praktikum/$npm_config_modul/build && gcc ./praktikum/$npm_config_modul/app/$npm_config_file.c -o ./praktikum/$npm_config_modul/build/$npm_config_file.exe; ./praktikum/$npm_config_modul/build/$npm_config_file.exe'",
     "praktikum_cpp": "sh -c '[ -z \"$npm_config_modul\" ] && echo \"Error: Parameter --modul (modul) dibutuhkan!\" && exit 1; [ -z \"$npm_config_file\" ] && echo \"Error: Parameter --file (file) dibutuhkan!\" && exit 1; mkdir -p ./praktikum/$npm_config_modul/build && g++ ./praktikum/$npm_config_modul/app/$npm_config_file.cpp -o ./praktikum/$npm_config_modul/build/$npm_config_file.exe; ./praktikum/$npm_config_modul/build/$npm_config_file.exe'"
   },
   "keywords": [],
