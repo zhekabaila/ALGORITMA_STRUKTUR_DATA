@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+#define MAX 100
 
 // Struktur untuk menyimpan data pegawai
 typedef struct {
@@ -14,34 +17,25 @@ typedef struct {
     int total_gaji;
 } Pegawai;
 
-// Fungsi untuk menghitung total gaji
-void hitungTotalGaji(Pegawai *p) {
-    int tunjangan_istri = 200000;
-    p->tunjangan_anak = (p->gaji_pokok * 5 / 100); // 5% gaji pokok per anak
+Pegawai pegawai[MAX] = {
+    {"121", "XK", "3D", 4000000, 1212, 123, 123, 12, 1},
+};
+int jumlahPegawai = 1;
 
-    if (p->jumlah_absensi > 20) {
-        p->uang_makan *= 2; // Lembur uang makan 2x lipat
-    }
+typedef struct {
+    char golongan[5];
+    int gajiPokok;
+    int uangMakan;
+    int transport;
+} Golongan;
 
-    p->total_gaji = p->gaji_pokok + tunjangan_istri + p->tunjangan_anak + (p->uang_makan * p->jumlah_absensi) + (p->transport * p->jumlah_absensi);
-}
+Golongan golongan[4] = {
+    {"3A", 1750000, 30000, 30000},
+    {"3B", 2500000, 40000, 35000},
+    {"3C", 3000000, 50000, 40000},
+    {"3D", 3500000, 60000, 45000},
+};
 
-// Fungsi untuk menampilkan data pegawai
-void tampilkanPegawai(Pegawai pegawai[], int n) {
-    printf("\nDaftar Pegawai setelah diurutkan (Bubble Sort berdasarkan Gaji Pokok):\n");
-    printf("----------------------------------------------------------------------------\n");
-    printf("| NIP        | Nama Pegawai | Gol | Gaji Pokok | Tunj. Anak | Uang Makan | Transport | Total Gaji |\n");
-    printf("----------------------------------------------------------------------------\n");
-
-    for (int i = 0; i < n; i++) {
-        printf("| %-10s | %-12s | %-3s | %-10d | %-10d | %-10d | %-9d | %-10d |\n",
-               pegawai[i].NIP, pegawai[i].nama, pegawai[i].golongan,
-               pegawai[i].gaji_pokok, pegawai[i].tunjangan_anak,
-               pegawai[i].uang_makan, pegawai[i].transport, pegawai[i].total_gaji);
-    }
-}
-
-// Fungsi Bubble Sort berdasarkan Gaji Pokok
 void bubbleSort(Pegawai pegawai[], int n) {
     int i, j;
     Pegawai temp;
@@ -57,27 +51,103 @@ void bubbleSort(Pegawai pegawai[], int n) {
     }
 }
 
-// Fungsi utama
-int main() {
-    Pegawai pegawai[] = {
-        {"123", "Andi", "3A", 1750000, 0, 30000, 30000, 22, 0},
-        {"124", "Budi", "3B", 2500000, 0, 40000, 35000, 18, 0},
-        {"125", "Citra", "3C", 3000000, 0, 50000, 40000, 20, 0},
-        {"126", "Dewi", "3D", 3500000, 0, 60000, 45000, 25, 0}
-    };
+void showData() {
+    printf("\n=============================================================================================================================================\n");
+    printf("============================================================ Data Pegawai ===================================================================\n");
+    printf("=============================================================================================================================================\n");
+    printf("| %-10s | %-20s | %-10s | %-12s | %-15s | %-12s | %-10s | %-15s | %-12s |\n",
+           "NIP", "Nama", "Golongan", "Gaji Pokok", "Tunjangan Anak", "Uang Makan", "Transport", "Jumlah Absensi", "Total Gaji");
+    printf("=============================================================================================================================================\n");
 
-    int n = sizeof(pegawai) / sizeof(pegawai[0]);
-
-    // Hitung total gaji untuk setiap pegawai
-    for (int i = 0; i < n; i++) {
-        hitungTotalGaji(&pegawai[i]);
+    for (int i = 0; i < jumlahPegawai; i++) {
+        printf("| %-10s | %-20s | %-10s | %-12d | %-15d | %-12d | %-10d | %-15d | %-12d |\n",
+               pegawai[i].NIP, pegawai[i].nama, pegawai[i].golongan,
+               pegawai[i].gaji_pokok, pegawai[i].tunjangan_anak,
+               pegawai[i].uang_makan, pegawai[i].transport,
+               pegawai[i].jumlah_absensi, pegawai[i].total_gaji);
     }
 
-    // Urutkan dengan Bubble Sort berdasarkan Gaji Pokok
-    bubbleSort(pegawai, n);
+    printf("=============================================================================================================================================\n");
+}
 
-    // Tampilkan data setelah sorting
-    tampilkanPegawai(pegawai, n);
+void createData() {
+    Pegawai pegawaiBaru;
+    int jumlahAnak;
+
+    printf("Buat Data Pegawai Baru:\n");
+    
+    if (jumlahPegawai > MAX) {
+        printf("Sudah mencapai batas penyimpanan!\n");
+    }
+
+    printf("NIP             > ");
+    scanf("%s", pegawaiBaru.NIP);
+    getchar();
+
+    printf("Nama           > ");
+    fgets(pegawaiBaru.nama, sizeof(pegawaiBaru.nama), stdin);
+    pegawaiBaru.nama[strlen(pegawaiBaru.nama) - 1] = '\0';
+
+    printf("Golongan            > ");
+    scanf("%s", pegawaiBaru.golongan);
+    getchar();
+
+    printf("Jumlah Anak        > ");
+    scanf("%d", &jumlahAnak);
+    getchar();
+
+    printf("Jumlah Absensi     > ");
+    scanf("%d", &pegawaiBaru.jumlah_absensi);
+    getchar();
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (strcmp(golongan[i].golongan, pegawaiBaru.golongan) == 0) {
+            pegawaiBaru.gaji_pokok = golongan[i].gajiPokok;
+            pegawaiBaru.uang_makan = golongan[i].uangMakan;
+            pegawaiBaru.transport = golongan[i].transport;
+            break;
+        }
+    }
+
+    pegawaiBaru.tunjangan_anak = (pegawaiBaru.gaji_pokok * 0.05) / jumlahAnak;
+    pegawaiBaru.uang_makan = pegawaiBaru.jumlah_absensi > 20 ? pegawaiBaru.uang_makan * 2 : pegawaiBaru.uang_makan;
+    pegawaiBaru.total_gaji = pegawaiBaru.gaji_pokok + pegawaiBaru.uang_makan + pegawaiBaru.transport + pegawaiBaru.tunjangan_anak;
+
+    pegawai[jumlahPegawai] = pegawaiBaru;
+    jumlahPegawai++;
+}
+
+int main() {
+    int pilihan;
+
+    do {
+        printf("\n===== MENU =====\n");
+        printf("1. Tampilkan Data Pegawai\n");
+        printf("2. Tambah Data Pegawai\n");
+        printf("3. Hapus Data Pegawai (Belakang)\n");
+        printf("0. Keluar\n");
+        printf("Pilih operasi: ");
+        scanf("%d", &pilihan);
+
+        switch (pilihan) {
+            case 1:
+                bubbleSort(pegawai, jumlahPegawai);
+                showData();
+                break;
+            case 2:
+                createData();
+                break;
+            case 3:
+                // deleteData();
+                break;
+            case 0:
+                printf("Keluar dari program.\n");
+                break;
+            default:
+                printf("Pilihan tidak valid! Silakan coba lagi.\n");
+        }
+    } while (pilihan != 0);
 
     return 0;
 }
