@@ -35,7 +35,7 @@ void printQuickSort(void* arr, int size, bool isNumber) {
 }
 
 void menu () {
-    printf("+-------------------------------------------+\n");
+    printf("\n+-------------------------------------------+\n");
     printf("|            Pilih Metode Sorting           |\n");
     printf("+-------------------------------------------+\n");
     printf("| [1] Bubble Sort                           |\n");
@@ -406,7 +406,16 @@ int main() {
             case 3:
                 mergeSort(integerArr, stringArr, 0 , arrayLength - 1, isNumber == 'y', isAscending == 'y');
                 printf("\nHasil Akhir Setelah Merge Sort:\n");
-                printArray(integerArr, stringArr, arrayLength, isNumber);
+                printf("[");
+                for (int i = 0; i <= arrayLength; i++) {
+                    if (isNumber == 'y') {
+                        printf("%d", integerArr[i]);
+                    } else {
+                        printf("%c", stringArr[i]);
+                    }
+                    if (i < (arrayLength) - 1) printf(", ");
+                }
+                printf("]\n");
                 break;
             case 4:
                 if (isNumber == 'y') {
@@ -414,8 +423,16 @@ int main() {
                 } else {
                     quickSort(stringArr, 0, arrayLength-1, isNumber == 'y', isAscending == 'y');
                 }
-                printf("\nHasil Akhir Setelah Quick Sort:\n");
-                printArray(integerArr, stringArr, arrayLength, isNumber);
+                printf("\nHasil Akhir Setelah Quick Sort:\n");printf("[");
+                for (int i = 0; i <= arrayLength; i++) {
+                    if (isNumber == 'y') {
+                        printf("%d", integerArr[i]);
+                    } else {
+                        printf("%c", stringArr[i]);
+                    }
+                    if (i < (arrayLength) - 1) printf(", ");
+                }
+                printf("]");
                 printf("\n");
                 break;
             case 5:
