@@ -1,15 +1,37 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void printArray(int integerArr[], char stringArr[], int arrayLength, bool isNumber, char methodName[]) {
-    printf("\nHasil pengurutan %s sebagai berikut: \n", methodName);
+void printArray(int integerArr[], char stringArr[], int arrayLength, bool isNumber) {
     printf("[");
-      for(int i = 0; i < arrayLength; i++){
-        printf(isNumber ? "%d" : "%c", isNumber ? integerArr[i] : stringArr[i]);
+    for (int i = 0; i < arrayLength; i++) {
+        if (isNumber) {
+            printf("%d", integerArr[i]);
+        } else {
+            printf("%c", stringArr[i]);
+        }
         if (i < arrayLength - 1) printf(", ");
-      }
-      printf("]\n");
-      printf("\n");
+    }
+    printf("]");
+    printf("\n");
+}
+
+void printQuickSort(void* arr, int size, bool isNumber) {
+    printf("[");
+    if (isNumber) {
+        int* intArr = (int*)arr;
+        for (int i = 0; i < size; i++) {
+            printf("%d", intArr[i]);
+            if (i < size - 1) printf(", ");
+        }
+    } else {
+        char* charArr = (char*)arr;
+        for (int i = 0; i < size; i++) {
+            printf("%c", charArr[i]);
+            if (i < size - 1) printf(", ");
+        }
+    }
+    printf("]");
+    printf("\n");
 }
 
 void menu () {
@@ -25,49 +47,101 @@ void menu () {
     printf("+-------------------------------------------+\n");
 }
 
-void bubbleSort(int integerArr[], char stringArr[], int arrayLength, bool isNumber, bool isAscending){
-
-    for(int i = 0; i < arrayLength; i++){
-        for(int j = 0; j < arrayLength - i - 1; j++){
-            if (isNumber == 1) {
-                if(isAscending == 1 ? (integerArr[j] > integerArr[j + 1]) : integerArr[j] < integerArr[j + 1]){
-                    int numberTmp = integerArr[j];
+void bubbleSort(int integerArr[], char stringArr[], int arrayLength, bool isNumber, bool isAscending) {
+    printf("\nProses Sorting:\n");
+    for (int i = 0; i < arrayLength - 1; i++) {
+        printf("Bubble ke-%d:\n", i + 1);
+        bool swapped = false;  // Untuk mendeteksi apakah terjadi pertukaran dalam iterasi ini
+        
+        for (int j = 0; j < arrayLength - i - 1; j++) {
+            if (isNumber) {
+                if ((isAscending && integerArr[j] > integerArr[j + 1]) || 
+                    (!isAscending && integerArr[j] < integerArr[j + 1])) {
+                    
+                    // Swap angka
+                    int temp = integerArr[j];
                     integerArr[j] = integerArr[j + 1];
-                    integerArr[j + 1] = numberTmp;
+                    integerArr[j + 1] = temp;
+                    swapped = true;
+
+                    // Menampilkan array setelah pertukaran
+                    printArray(integerArr, stringArr, arrayLength, isNumber);
                 }
             } else {
-                if(isAscending == 1 ? (stringArr[j] > stringArr[j + 1]) : stringArr[j] < stringArr[j + 1]){
-                    char stringTmp = stringArr[j];
+                if ((isAscending && stringArr[j] > stringArr[j + 1]) || 
+                    (!isAscending && stringArr[j] < stringArr[j + 1])) {
+                    
+                    // Swap huruf
+                    char temp = stringArr[j];
                     stringArr[j] = stringArr[j + 1];
-                    stringArr[j + 1] = stringTmp;
+                    stringArr[j + 1] = temp;
+                    swapped = true;
+
+                    // Menampilkan array setelah pertukaran
+                    printArray(integerArr, stringArr, arrayLength, isNumber);
                 }
             }
         }
-      }
 
-      printArray(integerArr, stringArr, arrayLength, isNumber, "Bubble Sort");
+        // Jika dalam satu iterasi tidak ada perubahan, berarti array sudah terurut
+        if (!swapped) {
+            printf("Array sudah terurut, menghentikan proses lebih awal.\n");
+            break;
+        }
+    }
+
+    // Menampilkan hasil akhir
+    printf("\nHasil Akhir Setelah Bubble Sort:\n");
+    printArray(integerArr, stringArr, arrayLength, isNumber);
 }
 
-void insertionSort(int integerArr[], char stringArr[], int arrayLength, bool isNumber, bool isAscending){
-    for(int i = 1; i < arrayLength; i++){
-        if (isNumber == 1){
-            for (int j = i; j > 0 && isAscending == 1 ? integerArr[j]<integerArr[j-1]: integerArr[j]>integerArr[j-1]; j--){
-                //lakukan swap value
-                int temp=integerArr[j-1];
-                integerArr[j-1]=integerArr[j];
-                integerArr[j]=temp;
-            }
-        } else {
-            for (int j = i; j > 0 && isAscending == 1? stringArr[j]<stringArr[j-1]: stringArr[j]<stringArr[j-1]; j--){
-                //lakukan swap value
-                char temp=stringArr[j-1];
-                stringArr[j-1]=stringArr[j];
-                stringArr[j]=temp;
-            }
-        }
-	}
+void insertionSort(int integerArr[], char stringArr[], int arrayLength, bool isNumber, bool isAscending) {
+    printf("\nProses Sorting:\n");
+    
+    for (int i = 1; i < arrayLength; i++) {
+        if (isNumber) {
+            int key = integerArr[i];
+            int j = i - 1;
 
-     printArray(integerArr, stringArr, arrayLength, isNumber, "Insertion Sort");
+            printf("Iterasi ke-%d: Menyisipkan %d\n", i, key);
+
+            // Geser elemen ke kanan untuk memberi ruang bagi elemen yang akan disisipkan
+            while (j >= 0 && (isAscending ? integerArr[j] > key : integerArr[j] < key)) {
+                integerArr[j + 1] = integerArr[j];
+                j--;
+                
+                // Menampilkan array setelah pergeseran
+                printArray(integerArr, stringArr, arrayLength, isNumber);
+            }
+
+            integerArr[j + 1] = key;
+
+        } else {
+            char key = stringArr[i];
+            int j = i - 1;
+
+            printf("Iterasi ke-%d: Menyisipkan %c\n", i, key);
+
+            // Geser elemen ke kanan untuk memberi ruang bagi elemen yang akan disisipkan
+            while (j >= 0 && (isAscending ? stringArr[j] > key : stringArr[j] < key)) {
+                stringArr[j + 1] = stringArr[j];
+                j--;
+
+                // Menampilkan array setelah pergeseran
+                printArray(integerArr, stringArr, arrayLength, isNumber);
+            }
+
+            stringArr[j + 1] = key;
+        }
+
+        // Menampilkan array setelah satu iterasi selesai
+        printf("Setelah Iterasi ke-%d:\n", i);
+        printArray(integerArr, stringArr, arrayLength, isNumber);
+    }
+
+    // Menampilkan hasil akhir
+    printf("\nHasil Akhir Setelah Insertion Sort:\n");
+    printArray(integerArr, stringArr, arrayLength, isNumber);
 }
 
 void merge(int integerArr[], char stringArr[], int left, int mid, int right, bool isNumber, bool isAscending) {
@@ -75,83 +149,102 @@ void merge(int integerArr[], char stringArr[], int left, int mid, int right, boo
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
-    // Buat array sementara
+    printf("\nMenggabungkan: ");
+    printf("[");
+    for (int i = left; i <= right; i++) {
+        if (isNumber) {
+            printf("%d", integerArr[i]);
+        } else {
+            printf("%c", stringArr[i]);
+        }
+        if (i < (right + 1) - 1) printf(", ");
+    }
+    printf("]");
+    printf("\n");
+
+
     if (isNumber) {
         int leftArr[n1], rightArr[n2];
 
         // Salin data ke array sementara
-        for (i = 0; i < n1; i++)
-            leftArr[i] = integerArr[left + i];
-        for (j = 0; j < n2; j++)
-            rightArr[j] = integerArr[mid + 1 + j];
+        for (i = 0; i < n1; i++) leftArr[i] = integerArr[left + i];
+        for (j = 0; j < n2; j++) rightArr[j] = integerArr[mid + 1 + j];
 
-        // Gabungkan kembali array sementara ke integerArr[left..right]
+        // Menggabungkan kembali array sementara ke integerArr
         i = 0;
         j = 0;
         k = left;
         while (i < n1 && j < n2) {
             if (isAscending ? (leftArr[i] <= rightArr[j]) : (leftArr[i] >= rightArr[j])) {
-                integerArr[k] = leftArr[i];
-                i++;
+                integerArr[k] = leftArr[i++];
             } else {
-                integerArr[k] = rightArr[j];
-                j++;
+                integerArr[k] = rightArr[j++];
             }
             k++;
         }
 
-        // Salin elemen yang tersisa
-        while (i < n1) {
-            integerArr[k] = leftArr[i];
-            i++;
-            k++;
-        }
-        while (j < n2) {
-            integerArr[k] = rightArr[j];
-            j++;
-            k++;
-        }
+        // Salin sisa elemen
+        while (i < n1) integerArr[k++] = leftArr[i++];
+        while (j < n2) integerArr[k++] = rightArr[j++];
+
     } else {
         char leftArr[n1], rightArr[n2];
 
         // Salin data ke array sementara untuk huruf
-        for (i = 0; i < n1; i++)
-            leftArr[i] = stringArr[left + i];
-        for (j = 0; j < n2; j++)
-            rightArr[j] = stringArr[mid + 1 + j];
+        for (i = 0; i < n1; i++) leftArr[i] = stringArr[left + i];
+        for (j = 0; j < n2; j++) rightArr[j] = stringArr[mid + 1 + j];
 
-        // Gabungkan kembali array sementara ke stringArr[left..right]
+        // Menggabungkan kembali array sementara ke stringArr
         i = 0;
         j = 0;
         k = left;
         while (i < n1 && j < n2) {
             if (isAscending ? (leftArr[i] <= rightArr[j]) : (leftArr[i] >= rightArr[j])) {
-                stringArr[k] = leftArr[i];
-                i++;
+                stringArr[k] = leftArr[i++];
             } else {
-                stringArr[k] = rightArr[j];
-                j++;
+                stringArr[k] = rightArr[j++];
             }
             k++;
         }
 
-        // Salin elemen yang tersisa
-        while (i < n1) {
-            stringArr[k] = leftArr[i];
-            i++;
-            k++;
-        }
-        while (j < n2) {
-            stringArr[k] = rightArr[j];
-            j++;
-            k++;
-        }
+        // Salin sisa elemen
+        while (i < n1) stringArr[k++] = leftArr[i++];
+        while (j < n2) stringArr[k++] = rightArr[j++];
     }
+
+    printf("Setelah Merge: ");
+    printf("[");
+    for (int i = left; i <= right; i++) {
+        if (isNumber) {
+            printf("%d", integerArr[i]);
+        } else {
+            printf("%c", stringArr[i]);
+        }
+        if (i < (right + 1) - 1) printf(", ");
+    }
+    printf("]");
+    printf("\n");
+
 }
 
+// Fungsi rekursif Merge Sort
 void mergeSort(int integerArr[], char stringArr[], int left, int right, bool isNumber, bool isAscending) {
     if (left < right) {
         int mid = left + (right - left) / 2;
+
+        printf("\nMembagi: ");
+        printf("[");
+        for (int i = left; i <= right; i++) {
+            if (isNumber) {
+                printf("%d", integerArr[i]);
+            } else {
+                printf("%c", stringArr[i]);
+            }
+            if (i < (right + 1) - 1) printf(", ");
+        }
+        printf("]");
+        printf("\n");
+    
 
         mergeSort(integerArr, stringArr, left, mid, isNumber, isAscending);
         mergeSort(integerArr, stringArr, mid + 1, right, isNumber, isAscending);
@@ -160,86 +253,105 @@ void mergeSort(int integerArr[], char stringArr[], int left, int right, bool isN
     }
 }
 
-void swap(void* a, void* b, bool isNumber) {
-    if (isNumber) {
-        int temp = *(int*)a;
-        *(int*)a = *(int*)b;
-        *(int*)b = temp;
-    } else {
-        char temp = *(char*)a;
-        *(char*)a = *(char*)b;
-        *(char*)b = temp;
-    }
+void swapInt(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
+void swapChar(char* a, char* b) {
+    char temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+
+// Fungsi partition untuk QuickSort
 int partition(void* arr, int low, int high, bool isNumber, bool isAscending) {
     if (isNumber) {
         int* intArr = (int*)arr;
         int pivot = intArr[high];  
         int i = low - 1;  
 
+        printf("\nPartitioning: \n");
+        printQuickSort(arr, high + 1, isNumber);
+        
         for (int j = low; j < high; j++) {
             if (isAscending ? (intArr[j] < pivot) : (intArr[j] > pivot)) {
                 i++;
-                swap(&intArr[i], &intArr[j], isNumber);
+                swapInt(&intArr[i], &intArr[j]);
+                printQuickSort(arr, high + 1, isNumber);
             }
         }
-        swap(&intArr[i + 1], &intArr[high], isNumber);
+        swapInt(&intArr[i + 1], &intArr[high]);
+        printQuickSort(arr, high + 1, isNumber);
         return i + 1;
     } else {
         char* charArr = (char*)arr;
         char pivot = charArr[high];  
         int i = low - 1;  
 
+        printf("\nPartitioning: ");
+        printQuickSort(arr, high + 1, isNumber);
+        
         for (int j = low; j < high; j++) {
             if (isAscending ? (charArr[j] < pivot) : (charArr[j] > pivot)) {
                 i++;
-                swap(&charArr[i], &charArr[j], isNumber);
+                swapChar(&charArr[i], &charArr[j]);
+                printQuickSort(arr, high + 1, isNumber);
             }
         }
-        swap(&charArr[i + 1], &charArr[high], isNumber);
+        swapChar(&charArr[i + 1], &charArr[high]);
+        printQuickSort(arr, high + 1, isNumber);
         return i + 1;
     }
 }
 
+// Fungsi rekursif QuickSort
 void quickSort(void* arr, int low, int high, bool isNumber, bool isAscending) {
     if (low < high) {
         int pi = partition(arr, low, high, isNumber, isAscending);
+        printf("\nPivot: %d\n", pi);
 
         quickSort(arr, low, pi - 1, isNumber, isAscending);
         quickSort(arr, pi + 1, high, isNumber, isAscending);
     }
 }
 
-void selectionSort(int integerArr[],char stringArr[], int n, bool isNumber, bool Ascending){
-  int i, j, posisi, swap;
-  for(i = 0; i < (n-1); i++){
-    posisi = i;
-    for (j = i + 1; j < n; j++){
-        if (isNumber == 1){
-            if(Ascending == 1 ? integerArr[posisi] > integerArr[j] : integerArr[posisi] < integerArr[j]){
-        posisi = j;
-      }
-        }else {
-            if(Ascending == 1 ? stringArr[posisi] > stringArr[j] : stringArr[posisi] < stringArr[j]){
-        posisi = j;
-      }
+void selectionSort(int integerArr[], char stringArr[], int n, bool isNumber, bool Ascending) {
+    int i, j, posisi;
+    for (i = 0; i < (n - 1); i++) {
+        posisi = i;
+        for (j = i + 1; j < n; j++) {
+            if (isNumber) {
+                if (Ascending ? integerArr[posisi] > integerArr[j] : integerArr[posisi] < integerArr[j]) {
+                    posisi = j;
+                }
+            } else {
+                if (Ascending ? stringArr[posisi] > stringArr[j] : stringArr[posisi] < stringArr[j]) {
+                    posisi = j;
+                }
+            }
         }
-    }
-    if(posisi != i){
-        if (isNumber == 1){
-            swap = integerArr[i];
-      integerArr[i] = integerArr[posisi];
-      integerArr[posisi] = swap;
-      }else{
-        swap = stringArr[i];
-      stringArr[i] = stringArr[posisi];
-      stringArr[posisi] = swap;
+        if (posisi != i) {
+            if (isNumber) {
+                int temp = integerArr[i];
+                integerArr[i] = integerArr[posisi];
+                integerArr[posisi] = temp;
+            } else {
+                char temp = stringArr[i];
+                stringArr[i] = stringArr[posisi];
+                stringArr[posisi] = temp;
+            }
+        }
 
-        }
+        // Menampilkan proses sorting di setiap iterasi
+        printf("Iterasi %d: ", i + 1);
+        printArray(integerArr, stringArr, n, isNumber);
     }
-  }
-  printArray(integerArr, stringArr, n, isNumber, "Insertion Sort");
+
+    printf("\nHasil Akhir Setelah Selection Sort:\n");
+    printArray(integerArr, stringArr, n, isNumber);
 }
 
 int main() {
@@ -293,7 +405,8 @@ int main() {
                 break;
             case 3:
                 mergeSort(integerArr, stringArr, 0 , arrayLength - 1, isNumber == 'y', isAscending == 'y');
-                printArray(integerArr, stringArr, arrayLength, isNumber == 'y', "Merge Sort");
+                printf("\nHasil Akhir Setelah Merge Sort:\n");
+                printArray(integerArr, stringArr, arrayLength, isNumber);
                 break;
             case 4:
                 if (isNumber == 'y') {
@@ -301,7 +414,9 @@ int main() {
                 } else {
                     quickSort(stringArr, 0, arrayLength-1, isNumber == 'y', isAscending == 'y');
                 }
-                printArray(integerArr, stringArr, arrayLength, isNumber == 'y', "Quick Sort");
+                printf("\nHasil Akhir Setelah Quick Sort:\n");
+                printArray(integerArr, stringArr, arrayLength, isNumber);
+                printf("\n");
                 break;
             case 5:
                 selectionSort(integerArr, stringArr, arrayLength, isNumber == 'y', isAscending == 'y'); 
