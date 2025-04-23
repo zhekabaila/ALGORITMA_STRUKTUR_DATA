@@ -71,6 +71,11 @@ void InsertAscending(List *L, infotype X) {
 }
 
 void PrintList(List L) {
+    if (IsEmpty(&L)) {
+        printf("Data kosong\n");
+        return;
+    }
+    
     address P = First(L);
     while (P != Nil) {
         printf("NIM: %lld, Nama: %s\n", info(P).nim, info(P).nama);
@@ -83,7 +88,7 @@ void FindNameByNIM(List L, long long nim) {
     if (P != Nil) {
         printf("Nama dengan NIM %lld: %s\n", nim, info(P).nama);
     } else {
-        printf("NIM %lld tidak ditemukan.\n", nim);
+        printf("NIM %lld tidak ditemukan dalam data\n", nim);
     }
 }
 
@@ -104,38 +109,6 @@ int main() {
     List Mahasiswa;
     CreateList(&Mahasiswa);
 
-    // infotype firstMahasiswa = {24700624706, "Agung Putra"};
-
-    // InsertAscending(&Mahasiswa, firstMahasiswa);
-
-    // // Membuat array data mahasiswa
-    // infotype dataMahasiswa[] = {
-    //     {12345678, "Budi"},
-    //     {12340000, "Andi"},
-    //     {12349999, "Cici"},
-    //     {12345000, "Didi"}
-    // };
-
-    // // Jumlah mahasiswa
-    // int jumlahMahasiswa = sizeof(dataMahasiswa) / sizeof(dataMahasiswa[0]);
-    
-    // // Memasukkan data mahasiswa ke dalam list
-    // for (int i = 0; i < jumlahMahasiswa; i++) {
-    //     InsertAscending(&Mahasiswa, dataMahasiswa[i]);
-    // }
-
-    // printf("Daftar Mahasiswa:\n");
-    // PrintList(Mahasiswa);
-
-    // printf("\nMencari nama dengan NIM 12345000:\n");
-    // FindNameByNIM(Mahasiswa, 12345000);
-
-    // printf("\nMenghapus NIM 12340000:\n");
-    // DeleteByNIM(&Mahasiswa, 12340000);
-
-    // printf("\nDaftar Mahasiswa setelah penghapusan:\n");
-    // PrintList(Mahasiswa);
-
     bool isRunning = true;
 
     while (isRunning) {
@@ -150,37 +123,44 @@ int main() {
         printf("Pilih menu: ");
         scanf("%d", &choice);
 
+        infotype newMahasiswa;
+        long long deleteNim;
+        long long searchNim;
+
         switch (choice) {
             case 1: 
-                infotype mahasiswa;
-
                 printf("Masukkan NIM: ");
-                scanf("%lld", &mahasiswa.nim);
+                scanf("%lld", &newMahasiswa.nim);
                 getchar();
 
                 printf("Masukkan Nama: ");
-                fgets(mahasiswa.nama, sizeof(mahasiswa.nama), stdin);
-                mahasiswa.nama[strlen(mahasiswa.nama) - 1] = '\0';
+                fgets(newMahasiswa.nama, sizeof(newMahasiswa.nama), stdin);
+                newMahasiswa.nama[strlen(newMahasiswa.nama) - 1] = '\0';
 
-                InsertAscending(&Mahasiswa, mahasiswa);
+                InsertAscending(&Mahasiswa, newMahasiswa);
                 break;
             case 2:
-                long long deleteNim;
-
                 printf("Masukkan NIM: ");
                 scanf("%lld", &deleteNim);
                 getchar();
 
-                DeleteByNIM(&Mahasiswa, deleteNim);
+                if (IsEmpty(&Mahasiswa)) {
+                    printf("Data kosong, tidak ada yang dapat dihapus\n");
+                } else {
+                    DeleteByNIM(&Mahasiswa, deleteNim);
+                    printf("Data berhasil dihapus\n");
+                }
                 break;
             case 3:
-                long long searchNim;
-
                 printf("Masukkan NIM: ");   
                 scanf("%lld", &searchNim);
                 getchar();
 
-                FindNameByNIM(Mahasiswa, searchNim);
+                if (IsEmpty(&Mahasiswa)) {
+                    printf("Data kosong, tidak ada yang dapat dicari\n");
+                } else {
+                    FindNameByNIM(Mahasiswa, searchNim);
+                }
                 break;
             case 4:
                 PrintList(Mahasiswa);
