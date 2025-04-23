@@ -38,10 +38,7 @@
   "C_Cpp_Runner.compilerArgs": [],
   "C_Cpp_Runner.linkerArgs": [],
   "C_Cpp_Runner.includePaths": [],
-  "C_Cpp_Runner.includeSearch": [
-    "*",
-    "**/*"
-  ],
+  "C_Cpp_Runner.includeSearch": ["*", "**/*"],
   "C_Cpp_Runner.excludeSearch": [
     "**/build",
     "**/build/**",
@@ -61,7 +58,8 @@
     "stdlib.h": "c",
     "stdbool.h": "c",
     "time.h": "c",
-    "structs.h": "c"
+    "structs.h": "c",
+    "stdio.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
