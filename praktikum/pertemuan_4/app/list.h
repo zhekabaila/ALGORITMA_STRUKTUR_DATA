@@ -1,7 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <stdbool.h> // untuk bool
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
